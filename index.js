@@ -4,9 +4,12 @@ const app = express(); // <--- Esta linha estava faltando
 const { buscarClientes } = require('./src/DAO/cliente/buscarClientes.js');
 const { buscarProduto } = require('./src/DAO/cliente/buscarProdutos.js');
 const { buscarPedidos } = require('./src/DAO/cliente/buscarPedidos.js');
+const { buscarEndereco } = require('./src/DAO/cliente/buscarEndereco.js');
+const { buscarStats } = require('./src/DAO/cliente/buscarStats.js');
 const { inserirProduto } = require('./src/DAO/cliente/addProduto.js');
 const { inserirCliente } = require('./src/DAO/cliente/addCliente.js')
 const { conexao, closeConexao, testarConexao } = require('./src/DAO/conexao');
+const { buscarItensPedidos } = require('./src/DAO/cliente/buscarItensPedidos.js');
 
 // Middleware necessário para usar req.body com JSON
 app.use(express.json());
@@ -28,6 +31,21 @@ app.get('/empresa_produtos_limpeza/v1/produtos', async (req, res) => {
 app.get('/empresa_produtos_limpeza/v1/pedidos', async (req, res) => {
     let pedidos = await buscarPedidos();
     res.json(pedidos);
+});
+
+app.get('/empresa_produtos_limpeza/v1/endereco', async (req, res) => {
+    let pedidos = await buscarEndereco();
+    res.json(endereco);
+});
+
+app.get('/empresa_produtos_limpeza/v1/stats', async (req, res) => {
+    let pedidos = await buscarStatus();
+    res.json(stats);
+});
+
+app.get('/empresa_produtos_limpeza/v1/itens', async (req, res) => {
+    let pedidos = await buscarItensPedidos();
+    res.json(itens);
 });
 
 // Faltava importar ou declarar 'inserirCliente'
@@ -80,6 +98,8 @@ app.post('/empresa_produtos_limpeza/v2/produto', async (req, res) => {
         });
     }
 });
+
+//FALTA OS ADD endereco, itenspedidos (acho que o pedidos) e status (não sei se tem mais)
 
 const porta = 3000;
 
