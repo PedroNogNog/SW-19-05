@@ -1,12 +1,13 @@
 const { conexao } = require('../conexao.js')
 
-async function inserirEndereço(id, lagradouro, cep, nomero, bairro, cidade) {
+async function inserirEndereco(id, logradouro, cep, numero, bairro, cidade) {
     const sql = `
-       INSERT INTO tbl_endereco (id, logradouro, cep, numero, bairro,  cidade) VALUES (?, ?, ?, ?, ?, ?)`;
+       INSERT INTO tbl_endereco (id, logradouro, cep, numero, bairro, cidade) VALUES (?, ?, ?, ?, ?, ?)
+       `;
 
     const conn = await conexao();
     try {
-        const [resultado] = await conn.query(sql, [id, lagradouro, cep, nomero, bairro, cidade]);
+        const [resultado] = await conn.query(sql, [id, logradouro, cep, numero, bairro, cidade]);
         await conn.end();
         return { sucesso: true, idInserido: resultado.insertId };
     } catch (err) {
@@ -14,4 +15,4 @@ async function inserirEndereço(id, lagradouro, cep, nomero, bairro, cidade) {
     }
 }
 
-module.exports = { inserirEndereço }; 
+module.exports = { inserirEndereco }; 
