@@ -12,8 +12,6 @@ async function inserirProduto(codigo, nome, id_categoria, preco) {
         return { sucesso: true, idInserido: resultado.insertId };
     } catch (err) {
         return { sucesso: false, erro: err.message };
-    } finally {
-        await conn.end();
     }
 }
 
