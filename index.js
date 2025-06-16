@@ -5,9 +5,11 @@ const { buscarClientes } = require('./src/DAO/cliente/buscarClientes.js');
 const { buscarProduto } = require('./src/DAO/cliente/buscarProdutos.js');
 const { buscarPedidos } = require('./src/DAO/cliente/buscarPedidos.js');
 const { buscarEndereco } = require('./src/DAO/cliente/buscarEndereco.js');
-const { buscarStats } = require('./src/DAO/cliente/buscarStats.js');
+const { buscarStatus } = require('./src/DAO/cliente/buscarStats.js');
 const { inserirProduto } = require('./src/DAO/cliente/addProduto.js');
-const { inserirCliente } = require('./src/DAO/cliente/addCliente.js')
+const { inserirCliente } = require('./src/DAO/cliente/addCliente.js');
+const { inserirEndereco } = require('./src/DAO/cliente/addEndereco.js');
+const { inserirPedido } = require('./src/DAO/cliente/addPedido.js');
 const { conexao, closeConexao, testarConexao } = require('./src/DAO/conexao');
 const { buscarItensPedidos } = require('./src/DAO/cliente/buscarItensPedidos.js');
 
@@ -74,18 +76,102 @@ app.post('/empresa_produtos_limpeza/v2/cliente', async (req, res) => {
     }
 });
 
-
 app.post('/empresa_produtos_limpeza/v2/produto', async (req, res) => {
-    const { id, nome } = req.body;
+    const { codigo, nome, id_categoria, preco } = req.body;
 
-    if (!id || !nome) {
+    // Verifique se todos os campos obrigatórios estão presentes
+    if (!codigo || !nome || !id_categoria || !preco) {
         return res.status(400).json({
-            mensagem: "Dados incompletos: 'id' e 'nome' são obrigatórios."
+            mensagem: "Dados incompletos: 'id', 'nome', 'id_categoria' e 'preco' são obrigatórios."
         });
     }
 
-    const resultado = await inserirProduto(id, nome);
+    // Chama a função para inserir o produto no banco de dados
+    const resultado = await inserirProduto(codigo, nome, id_categoria, preco);
 
+    // Retorna a resposta adequada dependendo do sucesso da inserção
+    if (resultado.sucesso) {
+        res.status(201).json({
+            mensagem: "Produto inserido com sucesso",
+            id: resultado.idInserido
+        });
+    } else {
+        res.status(500).json({
+            mensagem: "Erro ao inserir produto",
+            erro: resultado.erro
+        });
+    }
+});
+
+app.post('/empresa_produtos_limpeza/v2/pedido', async (req, res) => {
+    const { numero, data_elaboracao, cliente_id} = req.body;
+
+    // Verifique se todos os campos obrigatórios estão presentes
+    if (!numero || !data_elaboracao || !cliente_id) {
+        return res.status(400).json({
+            mensagem: "Dados incompletos: 'id', 'nome', 'id_categoria' e 'preco' são obrigatórios."
+        });
+    }
+
+    // Chama a função para inserir o produto no banco de dados
+    const resultado = await inserirPedido(numero, data_elaboracao, cliente_id);
+
+    // Retorna a resposta adequada dependendo do sucesso da inserção
+    if (resultado.sucesso) {
+        res.status(201).json({
+            mensagem: "Produto inserido com sucesso",
+            id: resultado.idInserido
+        });
+    } else {
+        res.status(500).json({
+            mensagem: "Erro ao inserir produto",
+            erro: resultado.erro
+        });
+    }
+});
+
+app.post('/empresa_produtos_limpeza/v2/endereco', async (req, res) => {
+    const { id, logradouro, cep, numero, bairro,  cidade} = req.body;
+
+    // Verifique se todos os campos obrigatórios estão presentes
+    if (!id || !logradouro || !cep || !numero || !bairro || !cidade) {
+        return res.status(400).json({
+            mensagem: "Dados incompletos: 'id', 'nome', 'id_categoria' e 'preco' são obrigatórios."
+        });
+    }
+
+    // Chama a função para inserir o produto no banco de dados
+    const resultado = await inserirEndereco(id, logradouro, cep, numero, bairro, cidade);
+
+    // Retorna a resposta adequada dependendo do sucesso da inserção
+    if (resultado.sucesso) {
+        res.status(201).json({
+            mensagem: "Produto inserido com sucesso",
+            id: resultado.idInserido
+        });
+    } else {
+        res.status(500).json({
+            mensagem: "Erro ao inserir produto",
+            erro: resultado.erro
+        });
+    }
+});
+
+
+app.post('/empresa_produtos_limpeza/v2/itens', async (req, res) => {
+    const { id, id_pedido, id_produto, qnt} = req.body;
+
+    // Verifique se todos os campos obrigatórios estão presentes
+    if (!id || !id_pedido || !id_produto || !qnt ) {
+        return res.status(400).json({
+            mensagem: "Dados incompletos: 'id', 'nome', 'id_categoria' e 'preco' são obrigatórios."
+        });
+    }
+
+    // Chama a função para inserir o produto no banco de dados
+    const resultado = await inseririten(id, id_pedido, id_produto, qnt);
+
+    // Retorna a resposta adequada dependendo do sucesso da inserção
     if (resultado.sucesso) {
         res.status(201).json({
             mensagem: "Produto inserido com sucesso",
