@@ -1,7 +1,7 @@
 const {conexao} = require('../conexao.js')
 
 
-async function buscarStatus(){
+async function buscarStats(){
     const sql = `select * from tbl_status;`
     
     const conn = await conexao()
@@ -15,4 +15,4 @@ async function buscarStatus(){
       }
 }
 
-module.exports = {buscarStatus}
+module.exports = {buscarStats}
