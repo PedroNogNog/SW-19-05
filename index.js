@@ -5,10 +5,10 @@ const { buscarClientes } = require('./src/DAO/cliente/buscarClientes.js');
 const { buscarProduto } = require('./src/DAO/cliente/buscarProdutos.js');
 const { buscarPedidos } = require('./src/DAO/cliente/buscarPedidos.js');
 const { buscarEndereco } = require('./src/DAO/cliente/buscarEndereco.js');
-const { buscarStatus } = require('./src/DAO/cliente/buscarStats.js');
+const { buscarStats } = require('./src/DAO/cliente/buscarStats.js');
 const { inserirProduto } = require('./src/DAO/cliente/addProduto.js');
 const { inserirCliente } = require('./src/DAO/cliente/addCliente.js');
-const { inserirEndereco } = require('./src/DAO/cliente/addEndereco.js');
+const { inserirEndereco } = require('./src/DAO/cliente/addEndereço.js');
 const { inserirPedido } = require('./src/DAO/cliente/addPedido.js');
 const { conexao, closeConexao, testarConexao } = require('./src/DAO/conexao');
 const { buscarItensPedidos } = require('./src/DAO/cliente/buscarItensPedidos.js');
@@ -36,17 +36,17 @@ app.get('/empresa_produtos_limpeza/v1/pedidos', async (req, res) => {
 });
 
 app.get('/empresa_produtos_limpeza/v1/endereco', async (req, res) => {
-    let pedidos = await buscarEndereco();
+    let endereco = await buscarEndereco();
     res.json(endereco);
 });
 
 app.get('/empresa_produtos_limpeza/v1/stats', async (req, res) => {
-    let pedidos = await buscarStatus();
+    let stats = await buscarStats();
     res.json(stats);
 });
 
 app.get('/empresa_produtos_limpeza/v1/itens', async (req, res) => {
-    let pedidos = await buscarItensPedidos();
+    let itens = await buscarItensPedidos();
     res.json(itens);
 });
 
